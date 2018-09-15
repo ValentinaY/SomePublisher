@@ -10,11 +10,19 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 public class Publisher {
 	private static final String FILENAME = "news.txt";
+	private static int[] ports = {5982,5983,5984,5985,5986};
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try {
-			Socket socket;
-			socket = new Socket("127.0.0.1",5982);
+			Socket socket=null;
+			int cont=0;
+			do {
+				try {
+					socket = new Socket("127.0.0.1",ports[cont]);				
+				} catch (Exception e) {
+					cont++;
+				}				
+			}while(!socket.isConnected() && cont<5);
 //			Se crean los canales de difusión
 			DataInputStream in = new DataInputStream(socket.getInputStream());
 			DataOutputStream out;
@@ -49,8 +57,12 @@ public class Publisher {
 				}
 				else {
 					out = new DataOutputStream(socket.getOutputStream());
-					out.writeUTF(sCurrentLine);
-					String pang = in.readUTF();
+					if(!sCurrentLine.isEmpty()) {
+						System.out.println("Estoy enviando un "+sCurrentLine);
+						out.writeUTF(sCurrentLine);
+						String pang = in.readUTF();
+						System.out.println(pang);						
+					}
 				}
 			}
 			br.close();

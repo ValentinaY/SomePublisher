@@ -1,33 +1,32 @@
 $
-#Hurricane #NorthCarolina
-Florence rebaja su fuerza pero sigue siendo potencialmente mortal
-El huracán Florence se ha debilitado y se ha convertido en un huracán de categoría 2 mientras se dirige hacia la costa este de Estados Unidos, según ha informado este jueves el Centro Nacional de Huracanes (NHC), aunque sigue siendo potencialmente mortal.
-
-Florence se encuentra a 520 kilómetros de Myrtle Beach, en Carolina del Sur, con vientos máximos sostenidos a 175 kilómetros por hora, según el NHC, con sede en Miami.
+#Pacific
+Entre los meses de junio y noviembre, el Valle del Cauca entra en una de sus temporadas turísticas más importantes del año, las ballenas jorobadas del Pacífico. Este atractivo turístico espera superar los 100.000 turistas para este 2018.
 
 $
-#Philippines #Typhoon
-Filipinas se prepara para la llegada del potente tifón Mangkhut
-Los meteorólogos prevén olas de siete metros, inundaciones y deslizamientos de tierra
+#Tsunami
+Consejos de seguridad y prevención frente a un posible tsunami:
+Cuando esté en zonas costeras, preste atención a las posibles alertas por tsunami.
+Organice una ruta de evacuación que conduzca a un terreno más elevado.
+Esté pendiente de ciertos signos que avisan acerca de la llegada de un tsunami como el rápido aumento o descenso del agua en la costa.
+Nunca se quede cerca de la orilla para ver venir un tsunami.
+Un tsunami está formado por una serie de olas. No vuelva a una zona de costa afectada por un tsunami hasta que las autoridades indiquen que es seguro.
 
 $
-#Zombies #Europe
-"In the event of an apocalyptic incident (eg zombies), any plans to rebuild and return England to its pre-attack glory would be led by the Cabinet Office, and thus any pre-planning activity would also taken place there," the Ministry of Defence said when asked about its response by a member of the public.
+#Caribe
+De acuerdo con las proyecciones del Ideam, se espera que la tormenta tropical toque tierra en las costas del Caribe este sábado. La Guajira y Magdalena, en alerta amarilla.
 
 $
-#USA #Mexico
-La empresa estadounidense de exploración marina Ocean Infinity, a cargo de las labores de búsqueda del submarino ARA San Juan, informó este miércoles del hallazgo de un objeto de 55 metros de largo. Según informó TN, las pruebas están siendo analizadas para determinar si se trata del sumergible desaparecido el 15 de noviembre de 2017 con 44 tripulantes a bordo.
+#Caribe
+La tormenta tropical Isaac está a 610 kilómetros de República Dominicana y se espera que llegue a territorio colombiano aproximadamente a las  8 de la mañana. La alerta es especialmente para los departamentos de La Guajira y Magdalena, por lo que el  Ideam declaró la alerta amarilla para ellos.
 
 $
-#USA #Hurricane
-Impactantes imágenes, a horas de que el huracán Florence azote EE.UU.
-Las ráfagas de viento alcanzan los 210 kilómetros por hora mientras se acerca a la zona costera. Los ciudadanos se vieron obligados a autoevacuarse por el peligro. ¡Mirá las fotos y videos!
+#Caribe
+Isaac trae vientos máximos de 75 kilómetros por hora. La velocidad del viento podría generar incremento de las olas y podría destruir árboles, vientos y techos.
 
 $
-#Argentina #Chile
-Al parecer el párroco había creado malestar en el pueblo tras haber nacido durante el último año un total de 18 niños pelirrojos siendo el propio sacerdote el único pelirrojo del municipio lo que levantó las sospechas de los vecinos.
+#Caribe
+Isaac se había convertido en el quinto huracán de la temporada 2018 en avanzar por el Océano Atlántico, pero se debilitó levemente a una poderosa tormenta tropical este lunes en la noche.
 
-
-
-
-
+$
+#Hurricane
+Los huracanes son peligrosos y destructivos. Conocidos también como ciclones o tifones en otras partes del mundo, los huracanes provocan fuertes vientos, inundaciones, lluvias torrenciales y marejadas (olas enormes). Obtenga más información sobre los huracanes y otras tormentas tropicales para estar preparado y mantener a su familia fuera de peligro.

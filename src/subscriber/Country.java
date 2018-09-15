@@ -12,6 +12,7 @@ import java.util.Arrays;
 public enum Country {
 	BRASIL("Brasil", new String[]{"Norte","Noreste","Oeste","Sureste","Sur"} ),
 	COLOMBIA("Colombia", new String[] {"Amazonas","Andina","Caribe", "Orinoquía", "Pacífica"}),
+	ECUADOR("Oriente", new String[] {"Costa","Oriente","Sierra"}),
 	NICARAGUA("Nicaragua", new String[] {"Caribe","Central","Pacífica"});
 	
 	private String[] regions;

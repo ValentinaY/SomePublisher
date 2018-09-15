@@ -30,7 +30,7 @@ public class GUISubscriber extends JFrame{
 	JComboBox<String> comboregion;
 	JComboBox<String> combocountry;
 	
-	private String collecteddata;
+	private String[] collecteddata = new String[2];
 	
 	public GUISubscriber() {
 		setSize(700, 600);
@@ -64,7 +64,7 @@ public class GUISubscriber extends JFrame{
 //				Se actualiza el combobox de regiones cuando se selecciona un país
 				comboregion.removeAllItems();
 				for (String string : regions) {
-					comboregion.addItem(string);
+					comboregion.addItem(string.toUpperCase());
 				}
 			}
 		});
@@ -74,12 +74,13 @@ public class GUISubscriber extends JFrame{
 			public void actionPerformed(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 //				Se almacenan los datos en un atributo para que la clase Subscriber tenga acceso a ellos
-				collecteddata = (String) comboregion.getSelectedItem();
+				collecteddata[1] = (String) comboregion.getSelectedItem();
+				collecteddata[0] = (String) combocountry.getSelectedItem();
 				dispose();
 			}
 		});
 	}
-	public String getcollecteddata() {
+	public String[] getcollecteddata() {
 		return collecteddata;
 	}
 
