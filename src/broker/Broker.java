@@ -2,6 +2,8 @@ package broker;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 /**
@@ -11,6 +13,7 @@ import java.util.Scanner;
 public class Broker {
 	
 	public static void main (String args[]) {
+		Queue<String> noticias = new LinkedList<>();
 		ServerSocket listenSocketp = null;
 		Scanner scanner = new Scanner(System.in);
 		   try{
@@ -29,14 +32,14 @@ public class Broker {
 			   listenSocketp = new ServerSocket(serverPort);	  
 			   
 			   System.out.println("Esperando por los suscriptores...");
-			   ConnectionS d = new ConnectionS(subsPort);
+			   ConnectionS d = new ConnectionS(subsPort,noticias);
 
 			   
 //			   Se establece un socket entre en broker y el publisher
 			   System.out.println("Esperando por el publicador...");				   
 			   Socket publisherSocket = listenSocketp.accept();
 			   @SuppressWarnings("unused")
-			   ConnectionP c = new ConnectionP(publisherSocket);
+			   ConnectionP c = new ConnectionP(publisherSocket,noticias);
 			   
 			   
 		   } catch(IOException e) {

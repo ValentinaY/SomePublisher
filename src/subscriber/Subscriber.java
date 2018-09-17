@@ -8,6 +8,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -29,17 +30,20 @@ public class Subscriber {
 		JFrame window = new GUISubscriber();
 		while(window.isActive());
 		GUISubscriber suscriber = (GUISubscriber) window;
-		System.out.println("Suscrito a las etiquetas de la región "+suscriber.getcollecteddata()[1]+" del país "+suscriber.getcollecteddata()[0]);
+		System.out.println("Suscrito a las etiquetas de la región "+suscriber.getcollecteddata()[1]+" del país "+suscriber.getcollecteddata()[0]);//esto para interfaz
 		String line ="";
 		Socket socket = null;
 		try {
-			int cont=0;
+			int cont=2;
 			boolean sent=false;
 			//Código para la suscripción
 			do {
+				System.out.println("puerto:"+brokers[cont]);
 				try {
 					socket = new Socket("127.0.0.1",brokers[cont]);
+					socket.setSoTimeout(5000);
 					if(socket.isConnected()) {
+						
 						DataInputStream in = new DataInputStream(socket.getInputStream());
 						DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 						System.out.println("Subscriptor conectado en la dirección "+socket.getInetAddress()+" con puerto en "+socket.getPort());
@@ -47,32 +51,49 @@ public class Subscriber {
 						out.writeUTF(suscriber.getcollecteddata()[0]);
 						out.writeUTF(suscriber.getcollecteddata()[1]);	
 						out.writeUTF(Integer.toString(id));
-						in.readUTF();	
+						String data = in.readUTF();	
+						System.out.println("In:"+data);
 						sent =true;
 						socket.close();
 					}
 					else {
 						cont++;
+						if(cont==5)cont=0;
 					}
 				} catch (Exception e) {
 					cont++;
+					if(cont==5)cont=0;
 				}
-			}while(!sent && cont<5);
+				
+			}while(!sent );
 				
 			//Código para la recepción de información
 			while(true) {
-				socket = new Socket("127.0.0.1",brokers[cont]);
-				if(socket.isConnected()) {
-					DataInputStream in = new DataInputStream(socket.getInputStream());
-					DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-					out.writeUTF("Me va a enviar información o qué?");
-					out.writeUTF("Acuérdese de mí, yo soy "+id);
-					in.readUTF();	
-					sent =true;
-					socket.close();
+				try {
+					socket = new Socket("127.0.0.1",brokers[cont]);
+					if(socket.isConnected()) {
+						DataInputStream in = new DataInputStream(socket.getInputStream());
+						DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+						out.writeUTF("#SEARCH");
+						out.writeUTF(Integer.toString(id));
+						in.readUTF();	
+						//sent =true;
+						socket.close();
+					}
+			 }catch (Exception e2) {
+				    System.out.println("Buscando Broker en puerto:"+ brokers[cont]);
+				    do {
+						try {
+							socket = new Socket("127.0.0.1",brokers[cont]);
+							
+						} catch (Exception e) {
+							cont++;
+							if(cont==5)cont=0;
+						}				
+					}while(!socket.isConnected());
 				}
 			}
-		} catch (IOException e1) {
+		} catch (Exception  e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}			

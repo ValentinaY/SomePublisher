@@ -14,6 +14,9 @@ import java.io.PrintWriter;
 import java.io.Writer;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Queue;
 
 /**
  * @author valya
@@ -28,8 +31,14 @@ public class ConnectionS extends Thread{
 	static PrintWriter writer;
 	int port;
 	private String collecteddata;
-	public ConnectionS(int port) {
+	Queue <String> noticias;
+	HashMap<Integer, List<String>> etiquetas = new HashMap<Integer, List<String>>();
+	HashMap<Integer, Queue<String>> correo = new HashMap<Integer, Queue<String>>();
+	
+	public ConnectionS(int port,Queue<String> noticias) {
 		this.port=port;
+		this.noticias=noticias;
+
 		try {
 			listenSockets = new ServerSocket(port);
 		} catch (IOException e) {
@@ -57,16 +66,31 @@ public class ConnectionS extends Thread{
 						while(cont<3) {
 							line=in.readUTF();
 							collecteddata+=line;
+							System.out.println("El sub me manda: "+collecteddata);
 							if(cont==0 || cont==1) {
 								collecteddata+="-";
+								
+							//AÑADIR DATOS AL HASHMAP
 							}
 							cont++;
 						}
-						out.writeUTF("pang");
+						
+						out.writeUTF("Pang broker-sub");
 						writeonfile(collecteddata, subscriberSocket.getInetAddress().toString(), subscriberSocket.getPort());
+						
 					}
-					else {
-						//Aquí va el código para el pang
+					if(line.compareTo("#SEARCH") == 0) {
+						line=in.readUTF();
+						//Queue <String> aux=correo.get(Integer.parseInt(line));
+						if(correo.get(Integer.parseInt(line)).peek().equals(null))out.writeUTF("Pang broker-sub");
+						//si la cola esta vacia envia un pang
+						else {
+							while(!correo.get(Integer.parseInt(line)).peek().equals(null)) {
+								out.writeUTF(correo.get(Integer.parseInt(line)).poll());
+								//Si la cola de correo no esta vacia, envia hasta que se vacia
+								
+							}
+						}
 					}
 				}catch (IOException e) {
 					// TODO: handle exception

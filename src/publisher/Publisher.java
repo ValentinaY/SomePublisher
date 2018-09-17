@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -14,13 +15,18 @@ public class Publisher {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try {
-			Socket socket=null;
 			int cont=0;
+			Socket socket= new Socket();
+			System.out.println(cont);
+			//int cont=0;
 			do {
 				try {
-					socket = new Socket("127.0.0.1",ports[cont]);				
+					System.out.println(cont);
+					socket = new Socket("127.0.0.1",ports[cont]);
+					
 				} catch (Exception e) {
 					cont++;
+					if(cont==5)cont=0;
 				}				
 			}while(!socket.isConnected() && cont<5);
 //			Se crean los canales de difusión
@@ -28,11 +34,13 @@ public class Publisher {
 			DataOutputStream out;
 			FileReader fr = new FileReader(FILENAME);
 			BufferedReader br = new BufferedReader(fr);
-
+/***********************************************************************************/
+/*LECTURA DE ARCHIVOS DE LAS NOTICIAS*/
 			String sCurrentLine="";
 			System.out.println("Reading file...");
 //			Mientras queden lineas por leer
 			while ((sCurrentLine = br.readLine()) != null) {
+				
 //				Si la linea actual indica la hora
 				if(sCurrentLine.startsWith("$")){
 //					Se inicia la comparación con la hora dada
@@ -56,16 +64,32 @@ public class Publisher {
 					}
 				}
 				else {
-					out = new DataOutputStream(socket.getOutputStream());
-					if(!sCurrentLine.isEmpty()) {
-						System.out.println("Estoy enviando un "+sCurrentLine);
-						out.writeUTF(sCurrentLine);
-						String pang = in.readUTF();
-						System.out.println(pang);						
+					try {
+						socket.setSoTimeout(5000);
+						out = new DataOutputStream(socket.getOutputStream());
+						if(!sCurrentLine.isEmpty()) {
+							System.out.println("Estoy enviando un :"+sCurrentLine);
+							out.writeUTF(sCurrentLine);
+							String pang = in.readUTF();
+							System.out.println(pang);						
+						}
+					}catch (SocketTimeoutException ste) {
+					    System.out.println("Socket timed out!");
+					    do {
+							try {
+								System.out.println(cont);
+								socket = new Socket("127.0.0.1",ports[cont]);
+								
+							} catch (Exception e) {
+								cont++;
+								if(cont==5)cont=0;
+							}				
+						}while(!socket.isConnected());
 					}
 				}
 			}
 			br.close();
+/**********************************************************************************/
 			socket.close();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
