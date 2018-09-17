@@ -17,6 +17,7 @@ import javax.swing.JFrame;
  */
 public class Subscriber {
 	private static int[] brokers = {5432,5433,5434,5435,5436};
+	private static int[] brokerr = {5437,5438,5439,5440,5441};
 	/**
 	 * @param args
 	 */
@@ -38,6 +39,7 @@ public class Subscriber {
 					DataInputStream in = new DataInputStream(socket.getInputStream());
 					DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 					System.out.println("Subscriptor conectado en la dirección "+socket.getInetAddress()+" con puerto en "+socket.getPort());
+					out.writeUTF("$SUSCRIPCIÓN");
 					out.writeUTF(suscriber.getcollecteddata()[0]);
 					out.writeUTF(suscriber.getcollecteddata()[1]);					
 					in.readUTF();
@@ -50,7 +52,7 @@ public class Subscriber {
 			//Código para la recepción de información
 			do {
 				try {
-					socket = new Socket("127.0.0.1",brokers[cont]);
+					socket = new Socket("127.0.0.1",brokerr[cont]);
 					System.out.println("Subscriptor conectado en la dirección "+socket.getInetAddress()+" con puerto en "+socket.getPort());
 					DataInputStream in = new DataInputStream(socket.getInputStream());
 					DataOutputStream out = new DataOutputStream(socket.getOutputStream());

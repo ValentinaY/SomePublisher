@@ -1,5 +1,8 @@
 package broker;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
@@ -25,19 +28,20 @@ public class Broker {
 			   int subsPort = scanner.nextInt();
 			   scanner.close();
 //			   Se crea un socket para el publicador y otro hacia el cliente
+			   listenSockets = new ServerSocket(subsPort);
 			   listenSocketp = new ServerSocket(serverPort);	  
-			   listenSockets = new ServerSocket(subsPort);		
+			   
+			   System.out.println("Esperando por los suscriptores...");
+			   Socket subscriberSocket = listenSockets.accept();
+			   ConnectionS d = new ConnectionS(subscriberSocket);
+
+			   
 //			   Se establece un socket entre en broker y el publisher
 			   System.out.println("Esperando por el publicador...");				   
 			   Socket publisherSocket = listenSocketp.accept();
 			   @SuppressWarnings("unused")
 			   ConnectionP c = new ConnectionP(publisherSocket);
-			   
-			   System.out.println("Esperando por los suscriptores...");
-			   Socket subscriberSocket = listenSockets.accept();
-			   
 			   System.out.println("Broker activo en la ip "+subscriberSocket.getInetAddress()+" y el puerto "+subscriberSocket.getPort());
-			   ConnectionS d = new ConnectionS(subscriberSocket);
 			   
 			   //Aquí está el código PAÍS-REGIÓN para asociar el enum Tag
 			   String codigo = d.getcode();
@@ -54,5 +58,4 @@ public class Broker {
 			}
 		   }
 }
-
 }
