@@ -3,20 +3,17 @@
  */
 package broker;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Queue;
+import java.util.ArrayList;
 
 /**
  * @author valya
@@ -31,14 +28,11 @@ public class ConnectionS extends Thread{
 	static PrintWriter writer;
 	int port;
 	private String collecteddata;
-	Queue <String> noticias;
-	HashMap<Integer, List<String>> etiquetas = new HashMap<Integer, List<String>>();
-	HashMap<Integer, Queue<String>> correo = new HashMap<Integer, Queue<String>>();
-	
-	public ConnectionS(int port,Queue<String> noticias) {
+	New noticia;
+		
+	public ConnectionS(int port,New noticia) {
 		this.port=port;
-		this.noticias=noticias;
-
+		this.noticia=noticia;
 		try {
 			listenSockets = new ServerSocket(port);
 		} catch (IOException e) {
@@ -67,30 +61,56 @@ public class ConnectionS extends Thread{
 							line=in.readUTF();
 							collecteddata+=line;
 							System.out.println("El sub me manda: "+collecteddata);
-							if(cont==0 || cont==1) {
+							if(cont==0) {
 								collecteddata+="-";
-								
 							//AÑADIR DATOS AL HASHMAP
+							}
+							if(cont==1) {
+								collecteddata+=";";
 							}
 							cont++;
 						}
-						
+						//Queda de forma: COLOMBIA-CARIBE;1278
 						out.writeUTF("Pang broker-sub");
 						writeonfile(collecteddata, subscriberSocket.getInetAddress().toString(), subscriberSocket.getPort());
-						
 					}
 					if(line.compareTo("#SEARCH") == 0) {
+						//Se lee el id del cliente
 						line=in.readUTF();
-						//Queue <String> aux=correo.get(Integer.parseInt(line));
-						if(correo.get(Integer.parseInt(line)).peek().equals(null))out.writeUTF("Pang broker-sub");
-						//si la cola esta vacia envia un pang
-						else {
-							while(!correo.get(Integer.parseInt(line)).peek().equals(null)) {
-								out.writeUTF(correo.get(Integer.parseInt(line)).poll());
-								//Si la cola de correo no esta vacia, envia hasta que se vacia
-								
+						
+						
+						
+						/**
+						 * Se verifica el id del cliente en el archivo de suscriptores, obteniendo la región.
+						 * Se buscan las etiquetas de la región.
+						 * Se verifica si hay noticias para la etiqueta.
+						 * Se envían las noticias al suscriptor.
+						 */
+						
+//						Se verifica el id del cliente en el archivo de suscriptores, obteniendo la región.
+						String region=getregionfromid(line);
+						
+						ArrayList<String> regions = new ArrayList<String>();
+//						Se buscan las etiquetas de la región.
+//						Se recorren todas las etiquetas
+						for (Tag tag : Tag.values()) {
+//							Se recorren las regiones de cada etiqueta
+							for (String code : tag.getCodes()) {
+//								Si la región pertenece se agrega a la lista de etiquetas
+								if(code.compareTo(region) == 0) {
+									regions.add(code);
+								}
 							}
 						}
+						
+//						Se verifica si las etiquetas de la noticia contienen al menos una etiqueta del cliente
+//						Si es así, se envía
+						noticia.validatedpp();
+						/**
+						 * TO DO
+						 */
+
+						
 					}
 				}catch (IOException e) {
 					// TODO: handle exception
@@ -119,5 +139,25 @@ public class ConnectionS extends Thread{
 			 System.err.println("Error while writing to file: " +
 		          e.getMessage());
 		  }
+	}
+	
+	public static String getregionfromid(String id) {
+		String region="";
+		try {
+			FileReader f = new FileReader("subs.txt");
+			@SuppressWarnings("resource")
+			BufferedReader b = new BufferedReader(f);
+			String[] lines;
+			while((region = b.readLine())!=null) {
+				lines = region.split(";");
+				if(id.compareTo( lines[1] )==0) {
+					return lines[0];
+				}
+			}
+			b.close();			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return region;
 	}
 }

@@ -6,9 +6,7 @@ package subscriber;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -19,7 +17,6 @@ import javax.swing.JFrame;
  */
 public class Subscriber {
 	private static int[] brokers = {5432,5433,5434,5435,5436};
-	private static int[] brokerr = {5437,5438,5439,5440,5441};
 	/**
 	 * @param args
 	 */
@@ -31,7 +28,6 @@ public class Subscriber {
 		while(window.isActive());
 		GUISubscriber suscriber = (GUISubscriber) window;
 		System.out.println("Suscrito a las etiquetas de la región "+suscriber.getcollecteddata()[1]+" del país "+suscriber.getcollecteddata()[0]);//esto para interfaz
-		String line ="";
 		Socket socket = null;
 		try {
 			int cont=2;
@@ -67,6 +63,7 @@ public class Subscriber {
 				
 			}while(!sent );
 				
+			String received="";
 			//Código para la recepción de información
 			while(true) {
 				try {
@@ -76,7 +73,12 @@ public class Subscriber {
 						DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 						out.writeUTF("#SEARCH");
 						out.writeUTF(Integer.toString(id));
-						in.readUTF();	
+						received=in.readUTF();	
+						System.out.println(received);
+						/**
+						 * En una interfaz se muestran los datos de 'received'
+						 */
+						
 						//sent =true;
 						socket.close();
 					}

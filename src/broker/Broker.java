@@ -1,9 +1,9 @@
 package broker;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Scanner;
 
 /**
@@ -13,9 +13,10 @@ import java.util.Scanner;
 public class Broker {
 	
 	public static void main (String args[]) {
-		Queue<String> noticias = new LinkedList<>();
+		New noticia = new New();
 		ServerSocket listenSocketp = null;
 		Scanner scanner = new Scanner(System.in);
+	
 		   try{
 //			   Los brokers no se conectan entre ellos, no se sabe en qué puerto escuchan los otros servidores
 			   
@@ -32,14 +33,15 @@ public class Broker {
 			   listenSocketp = new ServerSocket(serverPort);	  
 			   
 			   System.out.println("Esperando por los suscriptores...");
-			   ConnectionS d = new ConnectionS(subsPort,noticias);
+			   @SuppressWarnings("unused")
+			   ConnectionS d = new ConnectionS(subsPort,noticia);
 
 			   
 //			   Se establece un socket entre en broker y el publisher
 			   System.out.println("Esperando por el publicador...");				   
 			   Socket publisherSocket = listenSocketp.accept();
 			   @SuppressWarnings("unused")
-			   ConnectionP c = new ConnectionP(publisherSocket,noticias);
+			   ConnectionP c = new ConnectionP(publisherSocket,noticia);
 			   
 			   
 		   } catch(IOException e) {
@@ -54,4 +56,16 @@ public class Broker {
 			}
 		   }
 }
+	public static int getsubscribers() {
+		File input = new File("myFile.txt"); Scanner iterate;
+		int numLines=0; 
+		try {
+			iterate = new Scanner(input);
+			while(iterate.hasNextLine()) { iterate.nextLine(); numLines++; }
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return numLines;
+	}
 }
