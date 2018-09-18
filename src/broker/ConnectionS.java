@@ -90,7 +90,7 @@ public class ConnectionS extends Thread{
 //						Se verifica el id del cliente en el archivo de suscriptores, obteniendo la región.
 						String region=getregionfromid(line);
 						
-						ArrayList<String> regions = new ArrayList<String>();
+						ArrayList<String> tags = new ArrayList<String>();
 //						Se buscan las etiquetas de la región.
 //						Se recorren todas las etiquetas
 						for (Tag tag : Tag.values()) {
@@ -98,7 +98,7 @@ public class ConnectionS extends Thread{
 							for (String code : tag.getCodes()) {
 //								Si la región pertenece se agrega a la lista de etiquetas
 								if(code.compareTo(region) == 0) {
-									regions.add(code);
+									tags.add(tag.getTag());
 								}
 							}
 						}
