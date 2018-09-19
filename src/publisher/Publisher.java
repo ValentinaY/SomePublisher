@@ -64,14 +64,29 @@ public class Publisher {
 					}
 				}
 				else {
+					if(sCurrentLine.startsWith("/")) {
+						System.out.println("Alcanzado fin de la noticia, esperando pang");	
+						try {
+							socket.setSoTimeout(10000);
+							out = new DataOutputStream(socket.getOutputStream());
+							System.out.println("Estoy enviando un :"+sCurrentLine);
+							out.writeUTF(sCurrentLine);
+							String pang = in.readUTF();
+							System.out.println(pang);	
+						}catch (SocketTimeoutException ste) {
+						    
+						}
+						
+					}
+					else {
 					try {
-						socket.setSoTimeout(5000);
+						socket.setSoTimeout(10000);
 						out = new DataOutputStream(socket.getOutputStream());
 						if(!sCurrentLine.isEmpty()) {
 							System.out.println("Estoy enviando un :"+sCurrentLine);
 							out.writeUTF(sCurrentLine);
-							String pang = in.readUTF();
-							System.out.println(pang);						
+						//	String pang = in.readUTF();
+						//	System.out.println(pang);						
 						}
 					}catch (SocketTimeoutException ste) {
 					    System.out.println("Socket timed out!");
@@ -87,6 +102,8 @@ public class Publisher {
 						}while(!socket.isConnected());
 					}
 				}
+				}
+				
 			}
 			br.close();
 /**********************************************************************************/

@@ -34,7 +34,7 @@ public class Subscriber {
 			boolean sent=false;
 			//Código para la suscripción
 			do {
-				System.out.println("puerto:"+brokers[cont]);
+			//	System.out.println("puerto:"+brokers[cont]);
 				try {
 					socket = new Socket("127.0.0.1",brokers[cont]);
 					socket.setSoTimeout(5000);
@@ -72,18 +72,35 @@ public class Subscriber {
 						DataInputStream in = new DataInputStream(socket.getInputStream());
 						DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 						out.writeUTF("#SEARCH");
+						//System.out.println(Integer.toString(id));
 						out.writeUTF(Integer.toString(id));
 						received=in.readUTF();	
-						System.out.println(received);
+						//System.out.println(received);
 						/**
 						 * En una interfaz se muestran los datos de 'received'
 						 */
-						
+						if(received.equals("WAIT")) {
+							while(!received.equals("DONE")) {
+								received=in.readUTF();	
+								System.out.println(received);
+							}
+						}
+						if(received.equals("PANG")) {
+							do {
+								try {
+									socket = new Socket("127.0.0.1",brokers[cont]);
+									
+								} catch (Exception e) {
+									cont++;
+									if(cont==5)cont=0;
+								}				
+							}while(!socket.isConnected());
+						}
 						//sent =true;
 						socket.close();
 					}
 			 }catch (Exception e2) {
-				    System.out.println("Buscando Broker en puerto:"+ brokers[cont]);
+				 //   System.out.println("Buscando Broker en puerto:"+ brokers[cont]);
 				    do {
 						try {
 							socket = new Socket("127.0.0.1",brokers[cont]);

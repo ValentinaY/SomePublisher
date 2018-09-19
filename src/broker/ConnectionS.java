@@ -75,11 +75,11 @@ public class ConnectionS extends Thread{
 						writeonfile(collecteddata, subscriberSocket.getInetAddress().toString(), subscriberSocket.getPort());
 					}
 					if(line.compareTo("#SEARCH") == 0) {
+						//noticia.validatedpp();
+						//System.out.println("VALIDATED: "+noticia.getValidated());
 						//Se lee el id del cliente
 						line=in.readUTF();
-						
-						
-						
+//						System.out.println(line);
 						/**
 						 * Se verifica el id del cliente en el archivo de suscriptores, obteniendo la región.
 						 * Se buscan las etiquetas de la región.
@@ -89,19 +89,14 @@ public class ConnectionS extends Thread{
 						
 //						Se verifica el id del cliente en el archivo de suscriptores, obteniendo la región.
 						String region=getregionfromid(line);
+						//System.out.println(region);
 						
 						ArrayList<String> tags = new ArrayList<String>();
-//						Se buscan las etiquetas de la región.
-//						Se recorren todas las etiquetas
-						for (Tag tag : Tag.values()) {
-//							Se recorren las regiones de cada etiqueta
-							for (String code : tag.getCodes()) {
-//								Si la región pertenece se agrega a la lista de etiquetas
-								if(code.compareTo(region) == 0) {
-									tags.add(tag.getTag());
-								}
-							}
-						}
+						
+						Tags tag = new Tags();
+						
+						for (String code : tag.getMap().get(region))tags.add(code);
+						//se busca en el mapa las etiquetas asociadas a esa zona y se insertan en tags
 						
 						boolean belongs =false;
 						for (String tags1 : tags) {
@@ -116,13 +111,19 @@ public class ConnectionS extends Thread{
 //						Se verifica si las etiquetas de la noticia contienen al menos una etiqueta del cliente
 //						Si es así, se envía
 						if(belongs==true) {
+							out.writeUTF("WAIT");
 							for (String string : noticia.getContent()) {
 								out.writeUTF(string);								
 							}
+							out.writeUTF("DONE");
+							noticia=new New();
+						}
+						else {
+							out.writeUTF("PANG");
 						}
 						
 //						En cualquier caso, se entiende que el suscriptor ha sido validado
-						noticia.validatedpp();
+						
 						
 					}
 				}catch (IOException e) {

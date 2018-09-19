@@ -11,7 +11,7 @@ public class ConnectionP extends Thread {
 	//Flujo de datos hacia el publisher
 	DataInputStream pin;
 	DataOutputStream pout;
-	
+	int cont;
 	//Sockets
 	Socket publisherSocket;
 	New noticia;
@@ -34,6 +34,7 @@ public class ConnectionP extends Thread {
 	    	  while(true) {
 //	    		  El servidor lee lo que envía el publicador
 	    		  String data = pin.readUTF();
+	    		  System.out.println(data);
 	    		  if(data.contains("#")) {
 //	    			Queda la linea sin la almohadilla
 	    			String tags = data.substring(1); 
@@ -41,19 +42,31 @@ public class ConnectionP extends Thread {
 	    			String[] alltags =data.split(" ");
 //	    			Se agregan todos los tags a la noticia
 	    			for (String string : alltags) {
+	    				System.out.println("Tags :");
+						System.out.println(string);
 						noticia.addTag(string);
+						
 					}
 	    		  }
 	    		  else {
-	    			  noticia.addContent(data);
+	    			  if(data.startsWith("/")) {
+	    				  System.out.println("Fin noticia");
+	    		//  Se hace un flujo de datos hacia el publisher, no funciona sin eso
+	    	    		  pout =new DataOutputStream(publisherSocket.getOutputStream());
+//	    	    		  El publicador está esperando una confirmación
+	    	    		  
+	    	    		  while(noticia.getValidated() <= 2*Broker.getsubscribers()) {
+	    	    			  System.out.println("validated noticia: "+noticia.getValidated());
+	    	    			  System.out.println("subs: "+Broker.getsubscribers());
+	    	    			  noticia.validatedpp();
+	    	    		  }
+	    	    		  System.out.println("Envio Pang");
+	    	    		  noticia= new New();
+	    	    		  pout.writeUTF("pang");	
+	    			  }
+	    			  else noticia.addContent(data);
 	    		  }
-	    		  
-//	    		  Se hace un flujo de datos hacia el publisher, no funciona sin eso
-	    		  pout =new DataOutputStream(publisherSocket.getOutputStream());
-//	    		  El publicador está esperando una confirmación
-	    		  
-	    		  while(noticia.getValidated() != Broker.getsubscribers());
-	    		  pout.writeUTF("pang");	    			  
+     			  
 	    	  }
 	      } catch (EOFException e){
 		     System.out.println("EOF:"+e.getMessage());

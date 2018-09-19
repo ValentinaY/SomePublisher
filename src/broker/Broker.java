@@ -57,7 +57,7 @@ public class Broker {
 		   }
 }
 	public static int getsubscribers() {
-		File input = new File("myFile.txt"); Scanner iterate;
+		File input = new File("subs.txt"); Scanner iterate;
 		int numLines=0; 
 		try {
 			iterate = new Scanner(input);

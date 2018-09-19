@@ -18,8 +18,9 @@ public class New {
 	 * 
 	 */
 	public New() {
-		// TODO Auto-generated constructor stub
-	}
+		tags=  new ArrayList<String>();
+		content =  new ArrayList<String>();
+			}
 	public ArrayList<String> getTags() {
 		return tags;
 	}
