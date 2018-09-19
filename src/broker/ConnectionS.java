@@ -103,13 +103,26 @@ public class ConnectionS extends Thread{
 							}
 						}
 						
+						boolean belongs =false;
+						for (String tags1 : tags) {
+							for (String tags2 : noticia.getTags()) {
+								if(tags1.compareTo(tags2) == 0) {
+									belongs=true;
+									break;
+								}
+							}
+						}
+						
 //						Se verifica si las etiquetas de la noticia contienen al menos una etiqueta del cliente
 //						Si es así, se envía
+						if(belongs==true) {
+							for (String string : noticia.getContent()) {
+								out.writeUTF(string);								
+							}
+						}
+						
+//						En cualquier caso, se entiende que el suscriptor ha sido validado
 						noticia.validatedpp();
-						/**
-						 * TO DO
-						 */
-
 						
 					}
 				}catch (IOException e) {

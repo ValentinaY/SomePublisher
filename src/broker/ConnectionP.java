@@ -33,16 +33,25 @@ public class ConnectionP extends Thread {
 	      try {	                                     
 	    	  while(true) {
 //	    		  El servidor lee lo que envía el publicador
-	    		  String data = pin.readUTF();   
-	    		  System.out.println("Received from publisher: "+data);
-	    		  noticia.getContent().add(data);
+	    		  String data = pin.readUTF();
+	    		  if(data.contains("#")) {
+//	    			Queda la linea sin la almohadilla
+	    			String tags = data.substring(1); 
+//	    			Quedan todas las etiquetas
+	    			String[] alltags =data.split(" ");
+//	    			Se agregan todos los tags a la noticia
+	    			for (String string : alltags) {
+						noticia.addTag(string);
+					}
+	    		  }
+	    		  else {
+	    			  noticia.addContent(data);
+	    		  }
+	    		  
 //	    		  Se hace un flujo de datos hacia el publisher, no funciona sin eso
 	    		  pout =new DataOutputStream(publisherSocket.getOutputStream());
 //	    		  El publicador está esperando una confirmación
 	    		  
-	    		  /**
-	    		   * Si el estado entero de la noticia es igual al número de suscriptores, se hace el pang
-	    		   */
 	    		  while(noticia.getValidated() != Broker.getsubscribers());
 	    		  pout.writeUTF("pang");	    			  
 	    	  }

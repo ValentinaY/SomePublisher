@@ -41,4 +41,10 @@ public class New {
 	public void validatedpp() {
 		this.validated=this.validated+1;
 	}
+	public void addContent(String data) {
+		this.content.add(data);
+	}
+	public void addTag(String tag) {
+		this.tags.add(tag);
+	}
 }
